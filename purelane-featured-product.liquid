@@ -1,0 +1,392 @@
+{%- assign product_ref = all_products[section.settings.featured_product] -%}
+
+<div class="purelane-featured-product section-{{ section.id }}" id="featured-product">
+  <div class="wrap">
+    {%- if product_ref != blank -%}
+      <div class="featured-product-grid">
+        <!-- Product Media Gallery -->
+        <div class="product-media">
+          {%- if product_ref.featured_media -%}
+            <div class="main-image">
+              <img 
+                id="FeaturedMainImage-{{ section.id }}"
+                src="{{ product_ref.featured_media | image_url: width: 800 }}" 
+                alt="{{ product_ref.featured_media.alt | default: product_ref.title | escape }}"
+                loading="eager"
+              >
+            </div>
+            {%- if product_ref.media.size > 1 -%}
+              <div class="media-thumbnails">
+                {%- for media in product_ref.media -%}
+                  <button type="button" class="thumb-btn {% if forloop.first %}active{% endif %}" data-img-url="{{ media | image_url: width: 800 }}">
+                    <img src="{{ media | image_url: width: 150 }}" alt="{{ media.alt | escape }}" loading="lazy">
+                  </button>
+                {%- endfor -%}
+              </div>
+            {%- endif -%}
+          {%- else -%}
+            <div class="no-image-placeholder">
+              {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+            </div>
+          {%- endif -%}
+        </div>
+
+        <!-- Product Form & Details -->
+        <div class="product-info">
+          {%- if section.settings.badge_text != blank -%}
+            <span class="spotlight-badge">{{ section.settings.badge_text | escape }}</span>
+          {%- endif -%}
+
+          <h2 class="product-title">{{ product_ref.title | escape }}</h2>
+
+          <div class="product-rating">
+            <span class="stars">★★★★★</span>
+            <span class="rev-count">4.9 / 5.0 (1,240+ verified reviews)</span>
+          </div>
+
+          <div class="product-price">
+            <strong id="FeaturedPrice-{{ section.id }}">{{ product_ref.price | money }}</strong>
+            {%- if product_ref.compare_at_price > product_ref.price -%}
+              <s id="FeaturedComparePrice-{{ section.id }}">{{ product_ref.compare_at_price | money }}</s>
+              <span class="discount-pill">
+                {{ product_ref.compare_at_price | minus: product_ref.price | times: 100.0 | divided_by: product_ref.compare_at_price | round }}% OFF
+              </span>
+            {%- endif -%}
+          </div>
+
+          <div class="product-description">
+            {{ product_ref.description | truncatewords: 35 }}
+          </div>
+
+          <!-- Variants Selector -->
+          {%- unless product_ref.has_only_default_variant -%}
+            <div class="variant-selector-wrapper">
+              <label for="OptionSelect-{{ section.id }}">Select Option:</label>
+              <select id="OptionSelect-{{ section.id }}" class="variant-select">
+                {%- for variant in product_ref.variants -%}
+                  <option 
+                    value="{{ variant.id }}" 
+                    data-price="{{ variant.price | money }}"
+                    data-compare-price="{% if variant.compare_at_price > variant.price %}{{ variant.compare_at_price | money }}{% endif %}"
+                    {% unless variant.available %}disabled{% endunless %}
+                  >
+                    {{ variant.title }} - {{ variant.price | money }}{% unless variant.available %} (Sold Out){% endunless %}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </div>
+          {%- endunless -%}
+
+          <!-- Quantity & Purchase Action -->
+          <div class="product-action-row">
+            <div class="qty-picker">
+              <button type="button" class="qty-btn minus-btn">-</button>
+              <input type="number" id="QtyInput-{{ section.id }}" value="1" min="1" readonly>
+              <button type="button" class="qty-btn plus-btn">+</button>
+            </div>
+
+            {%- if product_ref.available -%}
+              <button 
+                type="button" 
+                class="btn btn-primary btn-featured-add ajax-add-to-cart"
+                data-variant-id="{{ product_ref.selected_or_first_available_variant.id }}"
+                id="FeaturedAddBtn-{{ section.id }}"
+              >
+                Add to Cart • <span id="FeaturedBtnPrice-{{ section.id }}">{{ product_ref.price | money }}</span>
+              </button>
+            {%- else -%}
+              <button type="button" class="btn btn-secondary" disabled>Out of Stock</button>
+            {%- endif -%}
+          </div>
+
+          <div class="trust-guarantees">
+            <div class="guarantee-item">🌱 100% Plant-Based</div>
+            <div class="guarantee-item">⚡ Fast Dispatch</div>
+            <div class="guarantee-item">🛡️ Safe & Non-Toxic</div>
+          </div>
+        </div>
+      </div>
+    {%- else -%}
+      <div class="placeholder-notice text-center">
+        <h2>Featured Product Spotlight</h2>
+        <p>Please select a product in the Theme Customizer sidebar to display this section.</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  .section-{{ section.id }} {
+    padding: 60px 0;
+    background: #ffffff;
+  }
+  .section-{{ section.id }} .wrap {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+  .featured-product-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+  
+  /* Media Gallery */
+  .product-media {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .main-image {
+    background: #f8f8f9;
+    border-radius: 16px;
+    overflow: hidden;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
+  }
+  .main-image img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  .media-thumbnails {
+    display: flex;
+    gap: 12px;
+  }
+  .thumb-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 8px;
+    border: 1px solid #e5e5e5;
+    background: #f8f8f9;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 4px;
+  }
+  .thumb-btn.active {
+    border-color: #111;
+  }
+  .thumb-btn img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Product Details */
+  .spotlight-badge {
+    background: #e8f5e9;
+    color: #2e7d32;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    margin-bottom: 12px;
+  }
+  .product-title {
+    font-size: 32px;
+    font-weight: 800;
+    margin: 0 0 12px;
+    letter-spacing: -0.5px;
+  }
+  .product-rating {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .stars {
+    color: #ffb400;
+    font-size: 16px;
+  }
+  .rev-count {
+    font-size: 13px;
+    color: #666;
+  }
+  .product-price {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .product-price strong {
+    font-size: 26px;
+    font-weight: 800;
+  }
+  .product-price s {
+    font-size: 18px;
+    color: #888;
+  }
+  .discount-pill {
+    background: #ffebee;
+    color: #c62828;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+  .product-description {
+    font-size: 15px;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  /* Variant & Quantity UI */
+  .variant-selector-wrapper {
+    margin-bottom: 20px;
+  }
+  .variant-selector-wrapper label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .variant-select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    background: #fff;
+  }
+  .product-action-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .qty-picker {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .qty-btn {
+    background: #f4f4f4;
+    border: none;
+    width: 38px;
+    height: 44px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .qty-picker input {
+    width: 44px;
+    border: none;
+    text-align: center;
+    font-weight: 600;
+  }
+  .btn-featured-add {
+    flex: 1;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0 24px;
+  }
+
+  /* Guarantees */
+  .trust-guarantees {
+    display: flex;
+    gap: 16px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+  }
+  .guarantee-item {
+    font-size: 12px;
+    font-weight: 600;
+    color: #444;
+  }
+
+  @media (max-width: 768px) {
+    .featured-product-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const section = document.querySelector('.section-{{ section.id }}');
+    if (!section) return;
+
+    // Thumbnail Switcher
+    const mainImg = section.querySelector('#FeaturedMainImage-{{ section.id }}');
+    const thumbs = section.querySelectorAll('.thumb-btn');
+    thumbs.forEach(thumb => {
+      thumb.addEventListener('click', function() {
+        thumbs.forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+        if (mainImg) mainImg.src = this.getAttribute('data-img-url');
+      });
+    });
+
+    // Quantity Picker
+    const qtyInput = section.querySelector('#QtyInput-{{ section.id }}');
+    const minusBtn = section.querySelector('.minus-btn');
+    const plusBtn = section.querySelector('.plus-btn');
+
+    if (minusBtn && plusBtn && qtyInput) {
+      minusBtn.addEventListener('click', () => {
+        let val = parseInt(qtyInput.value) || 1;
+        if (val > 1) qtyInput.value = val - 1;
+      });
+      plusBtn.addEventListener('click', () => {
+        let val = parseInt(qtyInput.value) || 1;
+        qtyInput.value = val + 1;
+      });
+    }
+
+    // Variant Selection Price Sync
+    const select = section.querySelector('#OptionSelect-{{ section.id }}');
+    const priceElem = section.querySelector('#FeaturedPrice-{{ section.id }}');
+    const btnPriceElem = section.querySelector('#FeaturedBtnPrice-{{ section.id }}');
+    const addBtn = section.querySelector('#FeaturedAddBtn-{{ section.id }}');
+
+    if (select) {
+      select.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const newPrice = selectedOption.getAttribute('data-price');
+        const variantId = this.value;
+
+        if (priceElem) priceElem.innerText = newPrice;
+        if (btnPriceElem) btnPriceElem.innerText = newPrice;
+        if (addBtn) addBtn.setAttribute('data-variant-id', variantId);
+      });
+    }
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Purelane Featured Product",
+  "tag": "section",
+  "class": "purelane-featured-product-section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "featured_product",
+      "label": "Select Featured Product"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Spotlight Badge Text",
+      "default": "Best Seller Spotlight"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Purelane Featured Product"
+    }
+  ]
+}
+{% endschema %}
