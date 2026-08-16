@@ -1,0 +1,476 @@
+<section class="sec" id="bundles" data-scene="3">
+  <div class="wrap">
+    <div class="glass glass-card sec-pad rv" style="margin-bottom:16px">
+      <div class="panel-head" style="margin-bottom:0">
+        <span class="kicker">{{ section.settings.kicker }}</span>
+        <h2 class="d2" style="margin-top:12px">{{ section.settings.heading }}</h2>
+        <p class="lede" style="margin:0 auto">{{ section.settings.subheading }}</p>
+      </div>
+    </div>
+
+    <div class="tiers">
+      <!-- Tier 1: Starter (2 Products) -->
+      <article class="glass glass-card tier rv">
+        <span class="tag">{{ section.settings.tier1_tag }}</span>
+        <div class="tierpix" aria-hidden="true">
+          {% if section.settings.product_list != blank %}
+            {% for prod in section.settings.product_list limit: 2 %}
+              <img src="{{ prod.featured_image | image_url: width: 100 }}" alt="{{ prod.title | escape }}" class="pimg" width="48" height="48" loading="lazy">
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="qty">2<small>Products</small></div>
+        <div class="price">{{ section.settings.tier1_price }} <s>{{ section.settings.tier1_compare_price }}</s></div>
+        <p class="body-s" style="font-size:12px">{{ section.settings.tier1_unit_price }}</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Pick any two products</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Free shipping across India</li>
+        </ul>
+        <a class="btn btn-ghost" href="{{ section.settings.tier1_btn_url | default: '#shop' }}">Build this box</a>
+      </article>
+
+      <!-- Tier 2: Most Popular (3 Products) -->
+      <article class="glass glass-card tier best rv rv-d2">
+        <span class="tag">{{ section.settings.tier2_tag }}</span>
+        <div class="tierpix" aria-hidden="true">
+          {% if section.settings.product_list != blank %}
+            {% for prod in section.settings.product_list limit: 3 %}
+              <img src="{{ prod.featured_image | image_url: width: 100 }}" alt="{{ prod.title | escape }}" class="pimg" width="48" height="48" loading="lazy">
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="qty">3<small>Products</small></div>
+        <div class="price">{{ section.settings.tier2_price }} <s>{{ section.settings.tier2_compare_price }}</s></div>
+        <p class="body-s" style="font-size:12px">{{ section.settings.tier2_unit_price }}</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Pick any three products</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Covers kitchen and laundry</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Free shipping across India</li>
+        </ul>
+        <a class="btn btn-primary" href="{{ section.settings.tier2_btn_url | default: '#shop' }}">Build this box
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13m-5-6 6 6-6 6"/></svg>
+        </a>
+      </article>
+
+      <!-- Tier 3: Whole Home (5 Products) -->
+      <article class="glass glass-card tier rv rv-d3">
+        <span class="tag">{{ section.settings.tier3_tag }}</span>
+        <div class="tierpix five" aria-hidden="true">
+          {% if section.settings.product_list != blank %}
+            {% for prod in section.settings.product_list limit: 5 %}
+              <img src="{{ prod.featured_image | image_url: width: 100 }}" alt="{{ prod.title | escape }}" class="pimg" width="48" height="48" loading="lazy">
+            {% endfor %}
+          {% endif %}
+        </div>
+        <div class="qty">5<small>Products</small></div>
+        <div class="price">{{ section.settings.tier3_price }} <s>{{ section.settings.tier3_compare_price }}</s></div>
+        <p class="body-s" style="font-size:12px">{{ section.settings.tier3_unit_price }}</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Pick any five products</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Every room in one order</li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg>Free shipping across India</li>
+        </ul>
+        <a class="btn btn-ghost" href="{{ section.settings.tier3_btn_url | default: '#shop' }}">Build this box</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+:root {
+  --sec-bg: #cbe6d7;
+  --card-bg: rgba(235, 245, 240, 0.72);
+  --card-border: rgba(255, 255, 255, 0.85);
+  --text-dark: #1b2621;
+  --text-muted: #57685e;
+  --accent-gold: #c67d26;
+  --accent-green: #386652;
+  --btn-dark: #074e40;
+}
+
+/* Base Section Alignment & Wavy Background */
+.sec {
+  background-color: var(--sec-bg);
+  background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.4) 0%, transparent 60%);
+  padding: 40px 16px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  color: var(--text-dark);
+}
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+}
+
+/* Light Mint Glass Card Effect */
+.glass-card {
+  background: var(--card-bg) !important;
+  backdrop-filter: blur(20px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(140%) !important;
+  border: 1.5px solid var(--card-border) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px rgba(27, 38, 33, 0.05) !important;
+  text-align: center;
+}
+
+.panel-head {
+  padding: 36px 20px;
+}
+
+.kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.d2 {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 38px;
+  letter-spacing: -0.01em;
+  color: var(--text-dark);
+  margin-top: 6px !important;
+  text-transform: uppercase;
+}
+
+.lede {
+  color: var(--text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 10px !important;
+  max-width: 480px;
+}
+
+/* Bundles Grid */
+.tiers {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .tiers {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.tier {
+  padding: 24px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  transition: transform 0.3s var(--ease, ease), box-shadow 0.3s ease;
+}
+
+.tier:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(27, 38, 33, 0.08) !important;
+}
+
+.tier.best {
+  border: 1.5px solid rgba(198, 125, 38, 0.45) !important;
+  box-shadow: 0 0 0 1px rgba(198, 125, 38, 0.3), 0 12px 32px rgba(27, 38, 33, 0.08) !important;
+}
+
+/* Header Tags */
+.tier .tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 16px;
+  background: rgba(198, 125, 38, 0.12);
+  border: 1px solid rgba(198, 125, 38, 0.28);
+  color: var(--accent-gold);
+}
+
+/* Product Icon Container */
+.tierpix {
+  width: 100%;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin-bottom: 16px;
+  padding: 8px;
+  border-radius: 12px;
+  background: rgba(220, 235, 228, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+.tierpix .pimg {
+  height: 48px;
+  width: auto;
+  max-width: 48px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+/* Quantity & Typography */
+.tier .qty {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 46px;
+  line-height: 0.9;
+  color: var(--text-dark);
+  width: 100%;
+  text-align: left;
+}
+
+.tier .qty small {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  display: block;
+  margin-top: 4px;
+}
+
+/* Pricing */
+.tier .price {
+  width: 100%;
+  text-align: left;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 26px;
+  color: var(--accent-gold);
+  margin: 14px 0 2px;
+}
+
+.tier .price s {
+  font-size: 13px;
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-left: 6px;
+}
+
+.tier .body-s {
+  width: 100%;
+  text-align: left;
+  color: var(--text-muted);
+}
+
+/* Bullet Points */
+.tier ul {
+  width: 100%;
+  list-style: none;
+  margin: 18px 0 24px;
+  display: grid;
+  gap: 10px;
+  text-align: left;
+}
+
+.tier li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--text-dark);
+  font-weight: 500;
+}
+
+.tier li svg {
+  width: 14px;
+  height: 14px;
+  color: var(--accent-green);
+  flex: 0 0 auto;
+}
+
+/* Buttons */
+.tier .btn {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  margin-top: auto;
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.85);
+  color: var(--text-dark);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.btn-ghost:hover {
+  background: #ffffff;
+}
+
+.btn-primary {
+  background: var(--btn-dark);
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 4px 12px rgba(7, 78, 64, 0.25);
+}
+
+.btn-primary:hover {
+  background: #053b30;
+}
+
+.btn-primary svg {
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 760px) {
+  .d2 { font-size: 28px; }
+  .tier .qty { font-size: 38px; }
+  .tierpix { height: 64px; }
+  .tierpix .pimg { height: 40px; }
+}
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Purelane Bundles",
+  "settings": [
+    {
+      "type": "product_list",
+      "id": "product_list",
+      "label": "Select Active Products",
+      "limit": 8
+    },
+    {
+      "type": "header",
+      "content": "Section Header"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker",
+      "default": "Build your bundle"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "One box. Every room."
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Mix and match across kitchen, laundry, home and skin. One flat price, no code needed, free shipping either way."
+    },
+    {
+      "type": "header",
+      "content": "Tier 1: Starter (2 Products)"
+    },
+    {
+      "type": "text",
+      "id": "tier1_tag",
+      "label": "Tag",
+      "default": "Starter"
+    },
+    {
+      "type": "text",
+      "id": "tier1_price",
+      "label": "Price",
+      "default": "₹349"
+    },
+    {
+      "type": "text",
+      "id": "tier1_compare_price",
+      "label": "Compare Price",
+      "default": "₹598"
+    },
+    {
+      "type": "text",
+      "id": "tier1_unit_price",
+      "label": "Unit Price Label",
+      "default": "Flat ₹174 per product"
+    },
+    {
+      "type": "url",
+      "id": "tier1_btn_url",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Tier 2: Most Popular (3 Products)"
+    },
+    {
+      "type": "text",
+      "id": "tier2_tag",
+      "label": "Tag",
+      "default": "Most popular"
+    },
+    {
+      "type": "text",
+      "id": "tier2_price",
+      "label": "Price",
+      "default": "₹499"
+    },
+    {
+      "type": "text",
+      "id": "tier2_compare_price",
+      "label": "Compare Price",
+      "default": "₹897"
+    },
+    {
+      "type": "text",
+      "id": "tier2_unit_price",
+      "label": "Unit Price Label",
+      "default": "Flat ₹166 per product"
+    },
+    {
+      "type": "url",
+      "id": "tier2_btn_url",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Tier 3: Whole Home (5 Products)"
+    },
+    {
+      "type": "text",
+      "id": "tier3_tag",
+      "label": "Tag",
+      "default": "Whole home"
+    },
+    {
+      "type": "text",
+      "id": "tier3_price",
+      "label": "Price",
+      "default": "₹799"
+    },
+    {
+      "type": "text",
+      "id": "tier3_compare_price",
+      "label": "Compare Price",
+      "default": "₹1495"
+    },
+    {
+      "type": "text",
+      "id": "tier3_unit_price",
+      "label": "Unit Price Label",
+      "default": "Flat ₹160 per product"
+    },
+    {
+      "type": "url",
+      "id": "tier3_btn_url",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    { "name": "Purelane Bundles" }
+  ]
+}
+{% endschema %}

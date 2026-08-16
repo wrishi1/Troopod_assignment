@@ -1,0 +1,538 @@
+{% comment %}
+  Why It Works Section - Dynamic Product Collection Rotator
+{% endcomment %}
+
+<!-- Anchor target for Header Navigation link: /#how-it-works -->
+<section class="works-section" id="how-it-works" style="position: relative;">
+  <span id="how-it-works-anchor" style="position: absolute; top: -100px; left: 0;"></span>
+
+  <div class="works-container">
+    <div class="works-main-card">
+
+      <!-- Top Row: Left Content & Right Rotator -->
+      <div class="works-top-grid">
+        <div class="works-left">
+          <span class="works-kicker">{{ section.settings.kicker }}</span>
+          <h2 class="works-heading">{{ section.settings.heading }}</h2>
+          <p class="works-description">{{ section.settings.description }}</p>
+
+          {% if section.settings.btn_text != blank %}
+            <a href="{{ section.settings.btn_link }}" class="works-btn">
+              <span>{{ section.settings.btn_text }}</span>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          {% endif %}
+        </div>
+
+        <div class="works-right">
+          <div class="product-rotator-card" id="ProductRotator-{{ section.id }}">
+            <div class="rotator-slides">
+              {% assign selected_collection = collections[section.settings.collection] %}
+              
+              {% if selected_collection != blank and selected_collection.products_count > 0 %}
+                {% for product in selected_collection.products limit: 5 %}
+                  <div class="rotator-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}">
+                    <div class="product-img-wrap">
+                      {% if product.featured_image != blank %}
+                        <img src="{{ product.featured_image | image_url: width: 400 }}" alt="{{ product.title | escape }}" loading="lazy" width="200" height="200">
+                      {% else %}
+                        <div class="placeholder-svg-wrap">
+                          {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                        </div>
+                      {% endif %}
+                    </div>
+                    <h4 class="product-title">{{ product.title }}</h4>
+                    <p class="product-subtitle">{{ product.description | strip_html | truncatewords: 6 }}</p>
+                  </div>
+                {% endfor %}
+              {% else %}
+                {% comment %} Fallback if no collection is selected yet {% endcomment %}
+                {% for i in (1..5) %}
+                  <div class="rotator-slide {% if forloop.first %}active{% endif %}" data-index="{{ forloop.index0 }}">
+                    <div class="product-img-wrap">
+                      <div class="placeholder-svg-wrap">
+                        {{ 'product-1' | placeholder_svg_tag: 'placeholder-svg' }}
+                      </div>
+                    </div>
+                    <h4 class="product-title">PRODUCT TITLE {{ i }}</h4>
+                    <p class="product-subtitle">Select a collection in theme settings</p>
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+
+            <!-- Dots Navigation -->
+            <div class="rotator-dots">
+              {% if selected_collection != blank and selected_collection.products_count > 0 %}
+                {% for product in selected_collection.products limit: 5 %}
+                  <span class="dot {% if forloop.first %}active{% endif %}" data-slide-to="{{ forloop.index0 }}"></span>
+                {% endfor %}
+              {% else %}
+                {% for i in (1..5) %}
+                  <span class="dot {% if forloop.first %}active{% endif %}" data-slide-to="{{ forloop.index0 }}"></span>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Row: Stats -->
+      <div class="works-stats-card">
+        <div class="stat-item">
+          <div class="stat-ring">{{ section.settings.stat1_number }}</div>
+          <h5>{{ section.settings.stat1_title }}</h5>
+          <p>{{ section.settings.stat1_desc }}</p>
+        </div>
+        <div class="stat-item">
+          <div class="stat-ring">{{ section.settings.stat2_number }}</div>
+          <h5>{{ section.settings.stat2_title }}</h5>
+          <p>{{ section.settings.stat2_desc }}</p>
+        </div>
+        <div class="stat-item">
+          <div class="stat-ring">{{ section.settings.stat3_number }}</div>
+          <h5>{{ section.settings.stat3_title }}</h5>
+          <p>{{ section.settings.stat3_desc }}</p>
+        </div>
+        <div class="stat-item">
+          <div class="stat-ring">{{ section.settings.stat4_number }}</div>
+          <h5>{{ section.settings.stat4_title }}</h5>
+          <p>{{ section.settings.stat4_desc }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<style>
+.works-section {
+  padding: 40px 20px;
+  background-color: #dbebe2;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  scroll-margin-top: 80px;
+}
+
+.works-container {
+  max-width: 1140px;
+  margin: 0 auto;
+}
+
+/* Outer Card */
+.works-main-card {
+  background: linear-gradient(135deg, #eef7f2 0%, #d8eae0 100%);
+  border-radius: 28px;
+  padding: 48px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.03);
+}
+
+.works-top-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+@media (min-width: 850px) {
+  .works-top-grid {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 48px;
+  }
+}
+
+/* Left Content */
+.works-kicker {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #8fa397;
+  margin-bottom: 16px;
+}
+
+.works-heading {
+  font-size: 38px;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  color: #1a2a24;
+  text-transform: uppercase;
+  margin: 0 0 16px 0;
+}
+
+.works-description {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #5c6e64;
+  max-width: 440px;
+  margin: 0 0 28px 0;
+}
+
+.works-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: #1b5346;
+  color: #ffffff;
+  padding: 14px 24px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.works-btn:hover {
+  background-color: #133d33;
+  transform: translateY(-1px);
+}
+
+/* Right Product Card Rotator */
+.product-rotator-card {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 24px;
+  padding: 32px 24px 20px 24px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+  position: relative;
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.rotator-slides {
+  position: relative;
+  min-height: 220px;
+}
+
+.rotator-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: scale(0.96);
+}
+
+.rotator-slide.active {
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.product-img-wrap {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.product-img-wrap img {
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+}
+
+.placeholder-svg-wrap {
+  width: 80px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+.product-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #1a2a24;
+  margin: 0 0 4px 0;
+}
+
+.product-subtitle {
+  font-size: 12px;
+  color: #7b8e83;
+  margin: 0;
+}
+
+/* Dots */
+.rotator-dots {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 16px;
+}
+
+.rotator-dots .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #ccd6d0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.rotator-dots .dot.active {
+  background-color: #d87834;
+  width: 18px;
+  border-radius: 10px;
+}
+
+/* Bottom Stats Card */
+.works-stats-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (min-width: 640px) {
+  .works-stats-card {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 1px solid #d0ded6;
+  margin: 0 auto 10px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a2a24;
+  background: #ffffff;
+}
+
+.stat-item h5 {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #ca7130;
+  margin: 0 0 4px 0;
+}
+
+.stat-item p {
+  font-size: 11px;
+  color: #6b7d72;
+  margin: 0;
+  line-height: 1.3;
+}
+
+@media (max-width: 600px) {
+  .works-main-card {
+    padding: 24px 16px;
+  }
+  .works-heading {
+    font-size: 28px;
+  }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // 1. Auto-Rotator Logic (1 second interval)
+  const container = document.getElementById('ProductRotator-{{ section.id }}');
+  if (container) {
+    const slides = container.querySelectorAll('.rotator-slide');
+    const dots = container.querySelectorAll('.dot');
+    if (slides.length > 1) {
+      let currentIndex = 0;
+      const intervalTime = 1000; // 1 second
+
+      function goToSlide(index) {
+        slides[currentIndex].classList.remove('active');
+        dots[currentIndex].classList.remove('active');
+        currentIndex = index;
+        slides[currentIndex].classList.add('active');
+        dots[currentIndex].classList.add('active');
+      }
+
+      function nextSlide() {
+        let nextIndex = (currentIndex + 1) % slides.length;
+        goToSlide(nextIndex);
+      }
+
+      let timer = setInterval(nextSlide, intervalTime);
+
+      dots.forEach(dot => {
+        dot.addEventListener('click', function () {
+          clearInterval(timer);
+          const targetIndex = parseInt(this.getAttribute('data-slide-to'));
+          goToSlide(targetIndex);
+          timer = setInterval(nextSlide, intervalTime);
+        });
+      });
+    }
+  }
+
+  // 2. Direct Header Link Scroll Handling
+  if (window.location.hash === '#how-it-works' || window.location.hash === '#HOW%20IT%20WORKS') {
+    const targetEl = document.getElementById('how-it-works');
+    if (targetEl) {
+      setTimeout(function() {
+        targetEl.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    }
+  }
+});
+</script>
+
+{% schema %}
+{
+  "name": "How It Works",
+  "settings": [
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Select Product Collection"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker Text",
+      "default": "WHY IT WORKS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "TOUGH ON GRIME. GENTLE ON EVERYTHING ELSE."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Every formula is built on plant-derived cleansers and essential oils. It behaves exactly like the cleaner you are used to, minus the things you never signed up for."
+    },
+    {
+      "type": "text",
+      "id": "btn_text",
+      "label": "Button Text",
+      "default": "SEE THE INGREDIENT LIST"
+    },
+    {
+      "type": "url",
+      "id": "btn_link",
+      "label": "Button Link"
+    },
+    {
+      "type": "header",
+      "content": "Stat 1"
+    },
+    {
+      "type": "text",
+      "id": "stat1_number",
+      "label": "Stat 1 Value",
+      "default": "99.9%"
+    },
+    {
+      "type": "text",
+      "id": "stat1_title",
+      "label": "Stat 1 Title",
+      "default": "GERM KILL"
+    },
+    {
+      "type": "text",
+      "id": "stat1_desc",
+      "label": "Stat 1 Description",
+      "default": "Tested against germs and bacteria"
+    },
+    {
+      "type": "header",
+      "content": "Stat 2"
+    },
+    {
+      "type": "text",
+      "id": "stat2_number",
+      "label": "Stat 2 Value",
+      "default": "0%"
+    },
+    {
+      "type": "text",
+      "id": "stat2_title",
+      "label": "Stat 2 Title",
+      "default": "SULPHATES"
+    },
+    {
+      "type": "text",
+      "id": "stat2_desc",
+      "label": "Stat 2 Description",
+      "default": "No SLS, chlorine or parabens"
+    },
+    {
+      "type": "header",
+      "content": "Stat 3"
+    },
+    {
+      "type": "text",
+      "id": "stat3_number",
+      "label": "Stat 3 Value",
+      "default": "100%"
+    },
+    {
+      "type": "text",
+      "id": "stat3_title",
+      "label": "Stat 3 Title",
+      "default": "PLANT BASED"
+    },
+    {
+      "type": "text",
+      "id": "stat3_desc",
+      "label": "Stat 3 Description",
+      "default": "Cleansers derived from plants"
+    },
+    {
+      "type": "header",
+      "content": "Stat 4"
+    },
+    {
+      "type": "text",
+      "id": "stat4_number",
+      "label": "Stat 4 Value",
+      "default": "4.8"
+    },
+    {
+      "type": "text",
+      "id": "stat4_title",
+      "label": "Stat 4 Title",
+      "default": "RATED"
+    },
+    {
+      "type": "text",
+      "id": "stat4_desc",
+      "label": "Stat 4 Description",
+      "default": "Across 8,000+ verified reviews"
+    }
+  ],
+  "presets": [
+    {
+      "name": "How It Works"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,289 @@
+{% comment %}
+  Best Selling Combos Section
+{% endcomment %}
+
+<section class="sec sec-combos" id="combos-{{ section.id }}">
+  <div class="wrap">
+    <div class="panel-head rv">
+      <span class="kicker">Curated Sets</span>
+      <h2 class="d2">Best-Selling Combos</h2>
+      <div class="rule">
+        <i></i>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 3v18M3 12h18"/>
+        </svg>
+        <i></i>
+      </div>
+    </div>
+
+    <div class="comborail">
+      {% comment %} Query all active products from the store {% endcomment %}
+      {% assign active_products = collections.all.products | where: 'available', true %}
+
+      {% comment %} Setup 4 Combos dynamically combining pairs/trios from active products {% endcomment %}
+      {% for i in (1..4) %}
+        {% case i %}
+          {% when 1 %}
+            {% assign p1 = active_products[0] %}
+            {% assign p2 = active_products[1] %}
+            {% assign p3 = active_products[2] %}
+            {% assign combo_title = "Home Care Trio" %}
+            {% assign combo_desc = "Complete plant-based kit for daily home routines." %}
+            {% assign discount_pct = 20 %}
+            {% assign is_hero = true %}
+          {% when 2 %}
+            {% assign p1 = active_products[3] %}
+            {% assign p2 = active_products[4] %}
+            {% assign p3 = null %}
+            {% assign combo_title = "Surface Duo Pack" %}
+            {% assign combo_desc = "Targeted cleaning power for kitchen counters and bath surfaces." %}
+            {% assign discount_pct = 15 %}
+            {% assign is_hero = false %}
+          {% when 3 %}
+            {% assign p1 = active_products[5] %}
+            {% assign p2 = active_products[6] %}
+            {% assign p3 = null %}
+            {% assign combo_title = "Laundry Essentials Duo" %}
+            {% assign combo_desc = "Tough on stains, gentle on fabrics. Zero synthetic dyes." %}
+            {% assign discount_pct = 18 %}
+            {% assign is_hero = false %}
+          {% when 4 %}
+            {% assign p1 = active_products[7] %}
+            {% assign p2 = active_products[0] %}
+            {% assign p3 = active_products[3] %}
+            {% assign combo_title = "Whole Home Kit" %}
+            {% assign combo_desc = "All-in-one deep cleaning solution for every room." %}
+            {% assign discount_pct = 25 %}
+            {% assign is_hero = false %}
+        {% endcase %}
+
+        {% comment %} Calculate total sum: Price = P1 + P2 + P3 {% endcomment %}
+        {% assign sum_price = 0 %}
+        {% if p1 %}{% assign sum_price = sum_price | plus: p1.price %}{% endif %}
+        {% if p2 %}{% assign sum_price = sum_price | plus: p2.price %}{% endif %}
+        {% if p3 %}{% assign sum_price = sum_price | plus: p3.price %}{% endif %}
+
+        {% comment %} Calculate discounted combo price {% endcomment %}
+        {% assign discount_multiplier = 100 | minus: discount_pct %}
+        {% assign discounted_price = sum_price | times: discount_multiplier | divided_by: 100 %}
+        {% assign savings_amount = sum_price | minus: discounted_price %}
+
+        <div class="combo glass glass-2 {% if is_hero %}hero-combo{% endif %} rv">
+          <div class="tray">
+            <span class="save">Save {{ discount_pct }}%</span>
+            {% if is_hero %}
+              <span class="flag">Most Popular</span>
+            {% endif %}
+
+            <div class="stack">
+              {% if p1 %}
+                <div class="it">
+                  <img src="{{ p1.featured_image | image_url: width: 120 }}" alt="{{ p1.title }}" class="pimg-thumb" loading="lazy">
+                  <span>{{ p1.title | truncate: 18 }}</span>
+                </div>
+              {% endif %}
+
+              {% if p2 %}
+                <div class="plus">+</div>
+                <div class="it">
+                  <img src="{{ p2.featured_image | image_url: width: 120 }}" alt="{{ p2.title }}" class="pimg-thumb" loading="lazy">
+                  <span>{{ p2.title | truncate: 18 }}</span>
+                </div>
+              {% endif %}
+
+              {% if p3 %}
+                <div class="plus">+</div>
+                <div class="it">
+                  <img src="{{ p3.featured_image | image_url: width: 120 }}" alt="{{ p3.title }}" class="pimg-thumb" loading="lazy">
+                  <span>{{ p3.title | truncate: 18 }}</span>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+
+          <div class="body">
+            <h3>{{ combo_title }}</h3>
+            <span class="cnt">
+              {% if p3 %}3 Products{% else %}2 Products{% endif %} Bundle
+            </span>
+            <p class="inc">{{ combo_desc }}</p>
+
+            <div class="prow">
+              <strong>{{ discounted_price | money }}</strong>
+              <s>{{ sum_price | money }}</s>
+              <em>Save {{ savings_amount | money }}</em>
+            </div>
+
+            <p class="fine">Free Express Shipping across India</p>
+
+            <form method="post" action="/cart/add">
+              {% if p1 %}<input type="hidden" name="items[0][id]" value="{{ p1.first_available_variant.id }}">{% endif %}
+              {% if p2 %}<input type="hidden" name="items[1][id]" value="{{ p2.first_available_variant.id }}">{% endif %}
+              {% if p3 %}<input type="hidden" name="items[2][id]" value="{{ p3.first_available_variant.id }}">{% endif %}
+              <button type="submit" class="btn {% if is_hero %}btn-primary{% else %}btn-ghost{% endif %} btn-sm">
+                Add Combo to Cart
+              </button>
+            </form>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <div class="swipecue">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+      </svg>
+      <span>Swipe to explore more combos</span>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Best Selling Combos",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Best Selling Combos"
+    }
+  ]
+}
+{% endschema %}
+
+{% style %}
+  #combos-{{ section.id }} .wrap { max-width: 1180px; margin: 0 auto; padding: 0 18px; }
+  #combos-{{ section.id }} .sec { position: relative; padding: 34px 0; }
+  #combos-{{ section.id }} .panel-head { text-align: center; margin-bottom: 26px; }
+  #combos-{{ section.id }} .kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: rgba(36, 26, 61, 0.56); }
+  #combos-{{ section.id }} .d2 { font-family: 'Outfit', system-ui, sans-serif; font-size: clamp(30px, 4.6vw, 54px); line-height: 0.94; font-weight: 800; color: #17102b; text-transform: uppercase; margin-bottom: 12px; }
+
+  #combos-{{ section.id }} .comborail {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    margin: 0 -18px;
+    padding: 4px 18px 14px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #combos-{{ section.id }} .combo {
+    flex: 0 0 302px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    border-radius: 26px;
+    border: 1px solid rgba(75, 58, 143, 0.16);
+    background: linear-gradient(158deg, rgba(255, 255, 255, 0.8), rgba(236, 230, 247, 0.56) 58%, rgba(222, 212, 240, 0.5));
+    overflow: hidden;
+    box-shadow: 0 22px 54px rgba(58, 44, 112, 0.13);
+  }
+
+  #combos-{{ section.id }} .combo.hero-combo {
+    border-color: rgba(201, 118, 29, 0.46);
+    box-shadow: 0 22px 54px rgba(58, 44, 112, 0.14), 0 0 0 1px rgba(201, 118, 29, 0.24);
+  }
+
+  #combos-{{ section.id }} .tray {
+    padding: 14px 14px 13px;
+    border-bottom: 1px solid rgba(75, 58, 143, 0.12);
+    position: relative;
+    background: linear-gradient(162deg, rgba(255, 255, 255, 0.56), rgba(236, 230, 247, 0.34));
+  }
+
+  #combos-{{ section.id }} .save {
+    display: inline-block;
+    font-size: 9.5px;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 5px 11px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.84);
+    border: 1px solid rgba(201, 118, 29, 0.34);
+    color: #4f7d10;
+    margin-bottom: 13px;
+  }
+
+  #combos-{{ section.id }} .flag {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    font-size: 8.6px;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 10px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #00706a, #004b46);
+    color: #f4fdf6;
+  }
+
+  #combos-{{ section.id }} .stack { display: flex; align-items: flex-end; gap: 3px; }
+  #combos-{{ section.id }} .stack .it { flex: 1 1 0; min-width: 0; text-align: center; }
+  #combos-{{ section.id }} .pimg-thumb {
+    height: 66px;
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    margin: 0 auto 8px;
+    display: block;
+  }
+
+  #combos-{{ section.id }} .stack .it span {
+    display: block;
+    font-size: 8.6px;
+    line-height: 1.32;
+    color: rgba(36, 26, 61, 0.78);
+    font-weight: 600;
+  }
+
+  #combos-{{ section.id }} .stack .plus { flex: 0 0 9px; color: #b8701c; font-weight: 800; font-size: 12px; padding-bottom: 30px; text-align: center; }
+
+  #combos-{{ section.id }} .body { padding: 15px 16px 18px; display: flex; flex-direction: column; flex: 1; }
+  #combos-{{ section.id }} .body h3 { font-family: 'Outfit', system-ui, sans-serif; font-size: 16px; font-weight: 700; text-transform: uppercase; color: #17102b; margin: 0; }
+  #combos-{{ section.id }} .cnt { font-size: 10.5px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(36, 26, 61, 0.56); margin-top: 6px; }
+  #combos-{{ section.id }} .inc { font-size: 12.4px; color: rgba(36, 26, 61, 0.78); line-height: 1.55; margin: 11px 0 14px; flex: 1; }
+
+  #combos-{{ section.id }} .prow { display: flex; align-items: baseline; gap: 9px; flex-wrap: wrap; margin-bottom: 6px; }
+  #combos-{{ section.id }} .prow strong { font-family: 'Outfit', system-ui, sans-serif; font-size: 25px; font-weight: 800; color: #17102b; }
+  #combos-{{ section.id }} .prow s { font-size: 13px; color: rgba(36, 26, 61, 0.56); }
+  #combos-{{ section.id }} .prow em { font-style: normal; font-size: 9.5px; font-weight: 800; text-transform: uppercase; padding: 4px 9px; border-radius: 999px; background: rgba(201, 118, 29, 0.14); border: 1px solid rgba(201, 118, 29, 0.34); color: #4f7d10; }
+
+  #combos-{{ section.id }} .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    padding: 0 18px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: auto;
+    border: none;
+    cursor: pointer;
+  }
+  #combos-{{ section.id }} .btn-primary { background: linear-gradient(135deg, #00706a, #004b46); color: #f4fdf6; }
+  #combos-{{ section.id }} .btn-ghost { background: rgba(255, 255, 255, 0.66); border: 1px solid rgba(75, 58, 143, 0.22); color: #01423b; }
+
+  /* Swipecue layout and SVG size constraint */
+  #combos-{{ section.id }} .swipecue {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    font-size: 12px;
+    color: rgba(36, 26, 61, 0.64);
+  }
+  #combos-{{ section.id }} .swipecue svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+  }
+{% endstyle %}

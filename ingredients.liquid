@@ -1,0 +1,168 @@
+{%- style -%}
+  .ing-section-{{ section.id }} {
+    position: relative;
+    padding: var(--sec-y) 0;
+  }
+  .ing-section-{{ section.id }} .sec-pad {
+    padding: clamp(26px, 3.4vw, 40px);
+    border-radius: 24px;
+    overflow: hidden;
+  }
+  .ing-section-{{ section.id }} .panel-head {
+    text-align: center;
+    margin-bottom: 26px;
+  }
+  .ing-section-{{ section.id }} .panel-head .d2 {
+    margin-bottom: 12px;
+  }
+  .ing-section-{{ section.id }} .panel-head .rule {
+    margin: 0 auto;
+    justify-content: center;
+    max-width: 240px;
+  }
+  .ing-section-{{ section.id }} .panel-head .rule i:first-child {
+    background: linear-gradient(90deg, transparent, rgba(236, 230, 247, 0.44));
+  }
+  .ing-section-{{ section.id }} .ing {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0;
+  }
+  @media (min-width: 760px) {
+    .ing-section-{{ section.id }} .ing {
+      grid-template-columns: repeat(5, 1fr);
+    }
+  }
+  .ing-section-{{ section.id }} .ing-i {
+    text-align: center;
+    padding: 16px 12px;
+    position: relative;
+  }
+  @media (min-width: 760px) {
+    .ing-section-{{ section.id }} .ing-i + .ing-i::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 14%;
+      bottom: 14%;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(236, 230, 247, 0.24), transparent);
+    }
+  }
+  .ing-section-{{ section.id }} .ing-i .art {
+    height: 88px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 12px;
+  }
+  .ing-section-{{ section.id }} .ing-i .art svg {
+    height: 84px;
+    width: auto;
+  }
+  .ing-section-{{ section.id }} .ing-i h4 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: .11em;
+    text-transform: uppercase;
+    color: var(--surface);
+    margin-bottom: 6px;
+  }
+  .ing-section-{{ section.id }} .ing-i p {
+    font-size: 12.2px;
+    color: var(--paper-2);
+    line-height: 1.5;
+  }
+{%- endstyle -%}
+
+<section id="ingredients" class="sec ing-section-{{ section.id }}">
+  <div class="wrap">
+    <div class="glass sec-pad rv">
+      <div class="panel-head">
+        <h2 class="d2">SOURCED FROM NATURE</h2>
+        <div class="rule">
+          <i></i>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2C8 2 5 6 5 10c0 4 3 8 7 12 4-4 7-8 7-12 0-4-3-8-7-8z"/>
+          </svg>
+          <i></i>
+        </div>
+      </div>
+      <div class="ing">
+        <div class="ing-i rv rv-d1">
+          <div class="art">
+            <svg viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="55" r="22" stroke="#124E3F" stroke-width="2.5" fill="none"/>
+              <path d="M38 48C42 53 58 53 62 48" stroke="#124E3F" stroke-width="2" stroke-linecap="round"/>
+              <path d="M50 33C50 25 40 22 34 26C34 32 42 33 50 33Z" fill="#EFA242" stroke="#EFA242" stroke-width="1.5"/>
+              <path d="M50 33C50 25 60 22 66 26C66 32 58 33 50 33Z" fill="#EFA242" stroke="#EFA242" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h4>COCONUT</h4>
+          <p>Plant-derived cleansers that lift grease</p>
+        </div>
+        <div class="ing-i rv rv-d2">
+          <div class="art">
+            <svg viewBox="0 0 100 100" fill="none">
+              <circle cx="45" cy="55" r="20" stroke="#124E3F" stroke-width="2.5" fill="none"/>
+              <path d="M45 35V75M25 55H65M31 41L59 69M31 69L59 41" stroke="#124E3F" stroke-width="1.5"/>
+              <circle cx="62" cy="38" r="12" stroke="#EFA242" stroke-width="2" fill="none"/>
+            </svg>
+          </div>
+          <h4>ORANGE PEEL</h4>
+          <p>Natural degreaser and fresh citrus lift</p>
+        </div>
+        <div class="ing-i rv rv-d3">
+          <div class="art">
+            <svg viewBox="0 0 100 100" fill="none">
+              <circle cx="50" cy="42" r="10" stroke="#124E3F" stroke-width="2.5" fill="none"/>
+              <circle cx="38" cy="62" r="10" stroke="#124E3F" stroke-width="2.5" fill="none"/>
+              <circle cx="62" cy="62" r="10" stroke="#124E3F" stroke-width="2.5" fill="none"/>
+              <path d="M50 32C50 24 40 21 34 25C34 31 42 32 50 32Z" fill="#EFA242" stroke="#EFA242" stroke-width="1.5"/>
+              <path d="M50 32C50 24 60 21 66 25C66 31 58 32 50 32Z" fill="#EFA242" stroke="#EFA242" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <h4>SOAP NUT</h4>
+          <p>A traditional plant foaming agent</p>
+        </div>
+        <div class="ing-i rv rv-d4">
+          <div class="art">
+            <svg viewBox="0 0 100 100" fill="none">
+              <path d="M25 75L75 25" stroke="#EFA242" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M35 65C30 60 32 50 40 52C42 60 38 64 35 65Z" fill="none" stroke="#124E3F" stroke-width="2"/>
+              <path d="M45 55C40 50 42 40 50 42C52 50 48 54 45 55Z" fill="none" stroke="#124E3F" stroke-width="2"/>
+              <path d="M55 45C50 40 52 30 60 32C62 40 58 44 55 45Z" fill="none" stroke="#124E3F" stroke-width="2"/>
+              <path d="M65 35C60 30 62 20 70 22C72 30 68 34 65 35Z" fill="none" stroke="#124E3F" stroke-width="2"/>
+            </svg>
+          </div>
+          <h4>NEEM</h4>
+          <p>Time-tested antibacterial from the tree</p>
+        </div>
+        <div class="ing-i rv rv-d5">
+          <div class="art">
+            <svg viewBox="0 0 100 100" fill="none">
+              <path d="M30 75C35 40 20 20 20 20C20 20 45 35 40 75" fill="none" stroke="#124E3F" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M45 75C45 35 50 15 50 15C50 15 60 35 55 75" fill="none" stroke="#124E3F" stroke-width="2.5" stroke-linecap="round"/>
+              <path d="M60 75C55 40 80 20 80 20C80 20 55 35 60 75" fill="none" stroke="#124E3F" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="42" y="73" width="16" height="5" fill="#EFA242" rx="2"/>
+            </svg>
+          </div>
+          <h4>LEMONGRASS</h4>
+          <p>Clean fragrance with nothing synthetic</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Ingredients",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Ingredients"
+    }
+  ]
+}
+{% endschema %}
